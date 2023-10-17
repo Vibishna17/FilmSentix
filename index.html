@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Sentiment Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <style>
+    .sentiment-text {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    </style>
+
+    <h1>Movie Sentiment Analyzer</h1>
+
+    <form method="POST">
+        <label for="movie_title">Enter a Movie Title:</label>
+        <input type="text" id="movie_title" name="movie_title" required>
+        <button type="submit" class="btnSubmit">Analyze</button>
+    </form>
+
+    <!-- Display Movie Name -->
+    <p>Movie Name: <span id="movieName">{{ movie_name }}</span></p>
+
+    {% if reviews %}
+    <h2>Sentiment:</h2>
+    <p>{{ overall_sentiment }}</p>
+
+    <h2>Movie Rating:</h2>
+    <p>{{ rating }}</p>
+
+    <h2>Positive Reviews:</h2>
+    <p>{{ positive_count }}</p>
+
+    <h2>Neutral Reviews:</h2>
+    <p>{{ neutral_count }}</p>
+
+    <h2>Negative Reviews:</h2>
+    <p>{{ negative_count }}</p>
+
+    <h2>Reviews:</h2>
+    <ul>
+        {% for review in reviews %}
+        <li><span class="sentiment-text">{{ review.sentiment }}</span> - {{ review.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add a button to trigger pie chart display -->
+    <!-- Inside the button element -->
+    <button id="showPieChart" data-positive="{{ positive_count }}" data-neutral="{{ neutral_count }}" data-negative="{{ negative_count }}">Show Pie Chart</button>
+
+    <!-- Create a canvas element for the pie chart -->
+    <canvas id="pieChart" width="400px" height="400px"></canvas>
+    {% endif %}
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get references to the button and canvas
+        const showPieChartButton = document.getElementById("showPieChart");
+        const pieChartCanvas = document.getElementById("pieChart");
+
+        // Add a click event listener to the button
+        showPieChartButton.addEventListener("click", function() {
+            // Get the data for the pie chart
+            const positiveCount = parseFloat(showPieChartButton.getAttribute("data-positive"));
+            const neutralCount = parseFloat(showPieChartButton.getAttribute("data-neutral"));
+            const negativeCount = parseFloat(showPieChartButton.getAttribute("data-negative"));
+
+            // Create a pie chart
+            const ctx = pieChartCanvas.getContext("2d");
+            const pieChart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Positive", "Neutral", "Negative"],
+                    datasets: [{
+                        data: [positiveCount, neutralCount, negativeCount],
+                        backgroundColor: ["green", "gray", "red"],
+                    }],
+                },
+                options: {
+                    responsive: false, // Disable responsiveness
+                },
+            });
+        });
+    });
+    </script>
+</body>
+</html>
