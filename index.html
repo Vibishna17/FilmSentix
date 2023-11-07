@@ -13,6 +13,15 @@
         font-size: 18px;
         font-weight: bold;
     }
+    /* Add a CSS class for the review box */
+.review-box {
+    border: 2px solid #333;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 20px;
+    background-color: #f7f7f7;
+}
+
     </style>
 
     <h1>Movie Sentiment Analyzer</h1>
@@ -45,7 +54,9 @@
     <h2>Reviews:</h2>
     <ul>
         {% for review in reviews %}
-        <li><span class="sentiment-text">{{ review.sentiment }}</span> - {{ review.content }}</li>
+        <li><span class="sentiment-text">{{ review.sentiment }}</span> - {{ review.content }}
+        </li>
+        <li><p class="review-box">Summary: {{ review.summary }}</p></li>
         {% endfor %}
     </ul>
 
@@ -88,5 +99,11 @@
         });
     });
     </script>
-</body>
-</html>
+    </body>
+
+<p>Designed By VIBISHNA BASKARAN</p>
+
+
+<footer>
+    &copy; 2023 Your Name. All rights reserved.
+</footer></html>
